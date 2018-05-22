@@ -6,7 +6,7 @@
  * Time: 12:00
  */
 
-namespace Qiboot\Gallery;
+namespace Fenmob\Gallery;
 
 
 class Gallery {

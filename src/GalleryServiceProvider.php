@@ -5,7 +5,7 @@
  * Date: 2018/5/21
  * Time: 11:55
  */
-namespace Qiboot\Gallery;
+namespace Fenmob\Gallery;
 use Illuminate\Support\ServiceProvider;
 
 class GalleryServiceProvider extends ServiceProvider {

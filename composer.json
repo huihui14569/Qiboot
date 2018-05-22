@@ -1,5 +1,5 @@
 {
-    "name": "qiboot/gallery",
+    "name": "fenmob/gallery",
     "description": "启博公司图库扩展",
     "license": "MIT",
     "authors": [
@@ -11,18 +11,18 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Qiboot\\Gallery\\": "src/"
+            "Fenmob\\Gallery\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Qiboot\\Gallery\\Tests\\": "tests/"
+            "Fenmob\\Gallery\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Qiboot\\Gallery\\GalleryServiceProvider"
+                "Fenmob\\Gallery\\GalleryServiceProvider"
             ]
         }
     }
