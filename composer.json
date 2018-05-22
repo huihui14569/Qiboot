@@ -1,0 +1,29 @@
+{
+    "name": "qiboot/gallery",
+    "description": "启博公司图库扩展",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "杨慧",
+            "email": "yanghuiboy@360shop.cn"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Qiboot\\Gallery\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Qiboot\\Gallery\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Qiboot\\Gallery\\GalleryServiceProvider"
+            ]
+        }
+    }
+}
