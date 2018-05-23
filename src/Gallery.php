@@ -10,7 +10,10 @@ namespace Fenmob\Gallery;
 
 
 class Gallery {
-    public function hello(){
-        echo "hello world1";
+
+    public function uploader(){
+        $defaultUploader = config('gallery.default');
+        $classname = config("gallery.upload_driver.{$defaultUploader}.classname");
+        return new $classname();
     }
 }
