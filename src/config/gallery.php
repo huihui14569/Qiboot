@@ -21,7 +21,8 @@ return [
                 'secretId'  => 'AKIDbFnBPV9N6g8PYY91TkJp6D92pT0NIpoc',
                 'secretKey' => 'mOp9MRMF2eN0Tq26zhEaZO3XsJk3CA1i',
             ],
-            'bucket' => 'kemanyun'
+            'bucket'      => 'kemanyun-1251581441',
+            'base_url'    => 'https://img.kemanyun.com',
         ],
 
         'aliyun' => [

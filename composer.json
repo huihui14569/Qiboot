@@ -26,7 +26,10 @@
         "laravel": {
             "providers": [
                 "Fenmob\\Gallery\\GalleryServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Gallery": "Fenmob\\Gallery\\Facades\\Gallery"
+            }
         }
     }
 }

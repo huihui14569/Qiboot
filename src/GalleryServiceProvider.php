@@ -13,6 +13,10 @@ class GalleryServiceProvider extends ServiceProvider {
         $this->loadRoutesFrom(__DIR__.'/routes/gallery.php');
         //加载数据库迁移
         $this->loadMigrationsFrom(__DIR__."/migrations");
+
+        $this->publishes([
+            __DIR__.'/config/gallery.php' => config_path('gallery.php'),
+        ]);
     }
 
     public function register(){
