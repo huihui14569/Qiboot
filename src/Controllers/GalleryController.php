@@ -16,28 +16,30 @@ class GalleryController extends Controller {
 
     private function success($data = [], $msg = "操作成功") {
         return response()->json([
-            'msg'    => $msg,
-            'status' => 1,
-            'data'   => $data,
+            'msg'         => $msg,
+            'status'      => 1,
+            'data'        => $data,
+            'status_code' => 1,
         ]);
     }
 
     private function error($msg = "请求错误", $data = []) {
         return response()->json([
-            'msg'    => $msg,
-            'status' => 0,
-            'data'   => $data,
+            'msg'         => $msg,
+            'status'      => 0,
+            'data'        => $data,
+            'status_code' => 0,
         ]);
     }
 
     public function __construct(GalleryService $galleryService) {
         $this->galleryService = $galleryService;
         //添加中间件
-        $this->middleware(function ($request,$next){
-            if ($request->user()->shop_id){
+        $this->middleware(function ($request, $next) {
+            if ($request->user()->shop_id) {
                 config(['gallery.shop_id' => $request->user()->user_id]);
                 return $next($request);
-            }else{
+            } else {
                 return $this->error("未登录无法使用该组件");
             }
         });
@@ -53,13 +55,18 @@ class GalleryController extends Controller {
                       ->when($request->get('cate_id') == -1, function ($query) {
                           return $query->onlyTrashed();
                       })
-                      ->when($request->get('cate_id') != 0,function($query){
+                      ->when($request->get('keyword'), function ($query, $keyword) {
+                          return $query->where('name', 'like', "%{$keyword}%");
+                      })
+                      ->when($request->get('cate_id') != 0, function ($query) {
                           try {
-                              $cate = FileCategory::query()->where('shop_id',config('gallery.shop_id'))->findOrFail(\request('cate_id'));
-                              if ($cate->pid){
-                                  return $query->where('cate_id_sub',$cate->id);
-                              }else{
-                                  return $query->where('cate_id_top',$cate->id);
+                              $cate = FileCategory::query()
+                                                  ->where('shop_id', config('gallery.shop_id'))
+                                                  ->findOrFail(\request('cate_id'));
+                              if ($cate->pid) {
+                                  return $query->where('cate_id_sub', $cate->id);
+                              } else {
+                                  return $query->where('cate_id_top', $cate->id);
                               }
                           } catch (ModelNotFoundException $e) {
                               return $query;
