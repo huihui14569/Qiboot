@@ -32,6 +32,15 @@ class GalleryController extends Controller {
 
     public function __construct(GalleryService $galleryService) {
         $this->galleryService = $galleryService;
+        //添加中间件
+        $this->middleware(function ($request,$next){
+            if ($request->user()->shop_id){
+                config(['gallery.shop_id' => $request->user()->user_id]);
+                return $next($request);
+            }else{
+                return $this->error("未登录无法使用该组件");
+            }
+        });
     }
 
     /**
