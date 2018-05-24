@@ -16,13 +16,13 @@ return [
     'upload_driver' => [
         'tencentyun' => [
             'classname'   => \Fenmob\Gallery\Drivers\Tencentyun::class,
-            'region'      => 'sh',
+            'region'      => '',
             'credentials' => [
-                'secretId'  => 'AKIDbFnBPV9N6g8PYY91TkJp6D92pT0NIpoc',
-                'secretKey' => 'mOp9MRMF2eN0Tq26zhEaZO3XsJk3CA1i',
+                'secretId'  => '',
+                'secretKey' => '',
             ],
-            'bucket'      => 'kemanyun-1251581441',
-            'base_url'    => 'https://img.kemanyun.com',
+            'bucket'      => '',
+            'base_url'    => '',
         ],
 
         'aliyun' => [
