@@ -7,6 +7,7 @@ use Fenmob\Gallery\Facades\Gallery;
 use Fenmob\Gallery\Models\File;
 use Fenmob\Gallery\Models\FileCategory;
 use Fenmob\Gallery\Services\GalleryService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -43,16 +44,33 @@ class GalleryController extends Controller {
                       ->when($request->get('cate_id') == -1, function ($query) {
                           return $query->onlyTrashed();
                       })
+                      ->when($request->get('cate_id') != 0,function($query){
+                          try {
+                              $cate = FileCategory::query()->where('shop_id',config('gallery.shop_id'))->findOrFail(\request('cate_id'));
+                              if ($cate->pid){
+                                  return $query->where('cate_id_sub',$cate->id);
+                              }else{
+                                  return $query->where('cate_id_top',$cate->id);
+                              }
+                          } catch (ModelNotFoundException $e) {
+                              return $query;
+                          }
+                      })
                       ->orderByDesc('sort')
                       ->orderByDesc('created_at')
                       ->paginate();
-        $cates  = FileCategory::query()
-                              ->with('child')
-                              ->where('shop_id', 1)
-                              ->where('pid', 0)
-                              ->orderByDesc('sort')
-                              ->get(['id', 'name', 'pid', 'file_num']);
-        $cates  = $cates->isNotEmpty() ? $cates->toArray() : [];
+        if ($request->get('cate_id') != 0) {
+            return $this->success([
+                'images' => $images,
+            ]);
+        }
+        $cates = FileCategory::query()
+                             ->with('child')
+                             ->where('shop_id', 1)
+                             ->where('pid', 0)
+                             ->orderByDesc('sort')
+                             ->get(['id', 'name', 'pid', 'file_num']);
+        $cates = $cates->isNotEmpty() ? $cates->toArray() : [];
         array_unshift($cates, [
             'id'   => 0,
             'name' => '全部',
@@ -120,7 +138,7 @@ class GalleryController extends Controller {
      */
     public function update(Request $request, $id) {
         try {
-            \request()->offsetSet('id',$id);
+            \request()->offsetSet('id', $id);
             $this->galleryService->updateFile();
             return $this->success();
         } catch (GalleryException $e) {
