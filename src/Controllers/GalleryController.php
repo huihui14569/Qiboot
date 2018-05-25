@@ -7,9 +7,11 @@ use Fenmob\Gallery\Facades\Gallery;
 use Fenmob\Gallery\Models\File;
 use Fenmob\Gallery\Models\FileCategory;
 use Fenmob\Gallery\Services\GalleryService;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Session\Middleware\StartSession;
 
 class GalleryController extends Controller {
     private $galleryService;//图库业务逻辑
@@ -35,14 +37,12 @@ class GalleryController extends Controller {
     public function __construct(GalleryService $galleryService) {
         $this->galleryService = $galleryService;
         //添加中间件
-        $this->middleware(function ($request, $next) {
-            if ($request->user()->shop_id) {
-                config(['gallery.shop_id' => $request->user()->user_id]);
-                return $next($request);
-            } else {
-                return $this->error("未登录无法使用该组件");
-            }
-        });
+        if (config('gallery.middleware') instanceof  \Closure){
+            $this->middleware([
+                EncryptCookies::class,StartSession::class
+            ]);
+            $this->middleware(config('gallery.middleware'));
+        }
     }
 
     /**
@@ -74,7 +74,9 @@ class GalleryController extends Controller {
                       })
                       ->orderByDesc('sort')
                       ->orderByDesc('created_at')
-                      ->paginate();
+                      ->paginate($request->get('limit'),[
+                          'id','shop_id','name','path','created_at','cate_id_top','cate_id_sub'
+                      ]);
         if ($request->get('cate_id') != 0) {
             return $this->success([
                 'images' => $images,
