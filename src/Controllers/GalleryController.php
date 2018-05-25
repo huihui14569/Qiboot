@@ -7,6 +7,7 @@ use Fenmob\Gallery\Facades\Gallery;
 use Fenmob\Gallery\Models\File;
 use Fenmob\Gallery\Models\FileCategory;
 use Fenmob\Gallery\Services\GalleryService;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class GalleryController extends Controller {
         //添加中间件
         if (config('gallery.middleware') instanceof  \Closure){
             $this->middleware([
-                EncryptCookies::class,StartSession::class
+                EncryptCookies::class,AddQueuedCookiesToResponse::class,StartSession::class
             ]);
             $this->middleware(config('gallery.middleware'));
         }

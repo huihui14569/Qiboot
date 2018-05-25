@@ -19,11 +19,11 @@ return [
         if (Auth::guard(config('gallery.default_guard'))->check()) {
             return $next($request);
         } else {
-            return [
+            return response()->json([
                 'status_code' => 0,
                 'msg'         => '请先登录',
                 'status'      => 0,
-            ];
+            ]);
         }
     },
 
